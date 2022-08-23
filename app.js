@@ -7,7 +7,7 @@ const searchInput = document.getElementById('search-input')
 const search =  document.getElementById('search');
 const searchSection = document.getElementById('search-section');
 const searchResultsContainer = document.getElementById('search-results-container');
-
+console.log('connected')
 
 window.addEventListener('load', async () => {
     const response = await axios.get(`${DOMAIN}/movie/popular?api_key=${API_KEY}`)
@@ -16,7 +16,8 @@ window.addEventListener('load', async () => {
 
     popularMovieList.forEach((movie) =>{
         const currMovieSection = document.createElement('section');
-        currMovieSection.classList.add('popular-movie-item')
+        currMovieSection.classList.add('popular-movie-item');
+        currMovieSection.addEventListener('mouseenter', () => {showDetails(event,movie)});
         const currMovieTitle = document.createElement('div');
         const currMovieImage = document.createElement('img');
         currMovieImage.src = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
@@ -50,9 +51,7 @@ document.getElementById('search').addEventListener('click', async () => {
 
         const currMovieSection = document.createElement('section');
         currMovieSection.classList.add('popular-movie-item')
-        currMovieSection.addEventListener('mouseover', () => {showDetails(event,movie)})
-
-        console.log(currMovieSection);
+        currMovieSection.addEventListener('mouseenter', () => {showDetails(event,movie)})
         const currMovieTitle = document.createElement('div');
         const currMovieImage = document.createElement('img');
         currMovieImage.src = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
@@ -77,6 +76,7 @@ document.getElementById('search').addEventListener('click', async () => {
     
             const currMovieSection = document.createElement('section');
             currMovieSection.classList.add('popular-movie-item')
+            currMovieSection.addEventListener('mouseenter', () => {showDetails(event,movie)});
             const currMovieTitle = document.createElement('div');
             const currMovieImage = document.createElement('img');
             currMovieImage.src = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
@@ -98,7 +98,8 @@ document.getElementById('search').addEventListener('click', async () => {
         searchedArray.forEach((movie) => {
 
             const currMovieSection = document.createElement('section');
-            currMovieSection.classList.add('popular-movie-item')
+            currMovieSection.classList.add('popular-movie-item');
+            currMovieSection.addEventListener('mouseenter', () => {showDetails(event,movie)});
             const currMovieTitle = document.createElement('div');
             const currMovieImage = document.createElement('img');
             currMovieImage.src = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
@@ -118,7 +119,6 @@ const showDetails = (event,movie) => {
     let detailedSectionContainer = event.target;
     detailedSectionContainer.innerHTML = '';
 
-    console.log(detailedSectionContainer)
     detailedSectionContainer.classList.add('detailed-container')
     
     let title = document.createElement('h1');
@@ -127,12 +127,12 @@ const showDetails = (event,movie) => {
 
 
     let date = document.createElement('p');
-    date.innerHTML = `Release Date: ${movie.release_date}`;
+    date.innerHTML = `Released: ${movie.release_date}`;
     date.classList.add('detailed-date');
 
 
     let rating = document.createElement('p');
-    rating.innerHTML = `${movie.vote_average}/10`;
+    rating.innerHTML = `${movie.vote_average}/10 ⭐`;
     rating.classList.add('detailed-rating');
 
 
@@ -142,8 +142,9 @@ const showDetails = (event,movie) => {
 
     let poster = document.createElement('img');
     poster.src = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
+    poster.classList.add('detailed-poster');
     
-    detailedSectionContainer.append(title,poster,date,rating,summary);
+    detailedSectionContainer.append(title,date,poster,rating,summary);
     
     
     detailedSectionContainer.addEventListener('mouseout', () => {revert(event,movie)})
@@ -158,3 +159,4 @@ const revert = (event,movie)  => {
     event.target.appendChild(currMovieTitle);
     event.target.appendChild(currMovieImage);
     event.target.classList.remove('detailed-container')
+}
